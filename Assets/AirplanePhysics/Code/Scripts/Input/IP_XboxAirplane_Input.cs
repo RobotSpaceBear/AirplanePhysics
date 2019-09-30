@@ -1,18 +1,34 @@
-﻿using System.Collections;
+﻿using IndiePixel;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IP_XboxAirplane_Input : MonoBehaviour
+namespace IndiePixel
 {
-    // Start is called before the first frame update
-    void Start()
+    public class IP_XboxAirplane_Input : IP_BaseAirplane_Input
     {
-        
-    }
+        protected override void HandleInput()
+        {
+            //controls
+            pitch = Input.GetAxis("Vertical");
+            roll = Input.GetAxis("Horizontal");
+            yaw = Input.GetAxis("Yaw");
+            throttle = Input.GetAxis("Throttle");
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            //brake
+            brake = Input.GetAxis("Fire1");
+
+            //flaps
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                flaps += 1;
+            }
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                flaps -= 1;
+            }
+
+            flaps = Mathf.Clamp(flaps, 0, maxFlapIncrements);
+        }
     }
 }

@@ -6,12 +6,13 @@ namespace IndiePixel
 {
     public class IP_BaseAirplane_Input : MonoBehaviour
     {
-        public float pitch = 0f;
-        public float roll = 0f;
-        public float yaw = 0f;
-        public float throttle = 0f;
-        public int flaps = 0;
-        public float brake = 0f;
+        protected float pitch = 0f;
+        protected float roll = 0f;
+        protected float yaw = 0f;
+        protected float throttle = 0f;
+        protected int flaps = 0;
+        protected int maxFlapIncrements = 2;
+        protected float brake = 0f;
 
         public float Pitch { get { return pitch; } }
         public float Roll { get { return roll; } }
@@ -32,12 +33,28 @@ namespace IndiePixel
             HandleInput();
         }
 
-        void HandleInput()
+        protected virtual void  HandleInput()
         {
+            //controls
             pitch = Input.GetAxis("Vertical");
             roll = Input.GetAxis("Horizontal");
+            yaw = Input.GetAxis("Yaw");
+            throttle = Input.GetAxis("Throttle");
 
-            Debug.Log(string.Format("pitch: {0}    Roll : {1}", pitch, roll));
+            //brake
+            brake = Input.GetKey(KeyCode.Space) ? 1f : 0f;
+
+            //flaps
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                flaps += 1;
+            }
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                flaps -= 1;
+            }
+
+            flaps = Mathf.Clamp(flaps, 0, maxFlapIncrements);
         }
     }
 }
